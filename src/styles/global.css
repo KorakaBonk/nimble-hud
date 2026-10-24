@@ -1,0 +1,277 @@
+/* Global rules only. Everything else is scoped inside the Svelte components. */
+
+/* Hide Foundry's macro bar while the HUD is open (togglable in module settings). The class
+   is set on <body> by Hud.svelte, so the hotbar returns the moment the HUD collapses. */
+body.nimble-hud-open #hotbar {
+	display: none !important;
+}
+
+#nimble-hud-root {
+	position: fixed;
+	inset: auto 0 0 0;
+	z-index: 20;
+	display: flex;
+	justify-content: center;
+	/* The container never blocks clicks on the canvas; only the HUD's own panels do. */
+	pointer-events: none;
+}
+
+/* The HUD's tooltip (see src/hud/tooltip.ts). One font size for every tooltip. */
+.nimble-hud-tooltip {
+	position: fixed;
+	z-index: 21;
+	max-width: 20rem;
+	padding: 0.1875rem 0.5rem;
+	color: #ece8df;
+	font: 0.75rem/1.3 var(--font-body, 'Signika', sans-serif);
+	white-space: normal;
+	pointer-events: none;
+	background: rgb(18 16 22 / 0.96);
+	border: 1px solid rgb(255 255 255 / 0.14);
+	border-radius: 0.25rem;
+	box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+	opacity: 0;
+	visibility: hidden;
+}
+
+.nimble-hud-tooltip.visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Heroic action popups (src/hud/heroic). They reuse the Nimble sheet's CSS variables, which the
+   system defines on :root, so the popups follow the sheet's light and dark themes.
+   --------------------------------------------------------------------------------------------- */
+.nhud-popup {
+	color: var(--nimble-dark-text-color);
+	font-family: var(--nimble-primary-font, var(--font-body, sans-serif));
+}
+
+.nhud-popup .panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.nhud-popup .heading {
+	margin: 0;
+	font-size: var(--nimble-sm-text);
+	font-weight: 900;
+	line-height: 1;
+	text-transform: uppercase;
+	color: var(--nimble-dark-text-color);
+}
+
+.nhud-popup .search {
+	width: 100%;
+	box-sizing: border-box;
+	color: var(--nimble-dark-text-color);
+}
+
+.nhud-popup .list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.nhud-popup .empty {
+	margin: 0;
+	padding: 0.75rem;
+	font-size: var(--nimble-sm-text);
+	font-weight: 500;
+	text-align: center;
+	color: var(--nimble-medium-text-color);
+}
+
+.nhud-popup .card {
+	display: flex;
+	flex-direction: column;
+	background: var(--nimble-box-background-color);
+	border: 1px solid var(--nimble-card-border-color);
+	border-radius: 4px;
+	transition: var(--nimble-standard-transition);
+}
+
+.nhud-popup .card:hover {
+	border-color: var(--nimble-box-color);
+	box-shadow: var(--nimble-box-shadow);
+}
+
+.nhud-popup .row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.5rem;
+	text-align: left;
+	cursor: pointer;
+}
+
+.nhud-popup .img {
+	flex-shrink: 0;
+	width: 2rem;
+	height: 2rem;
+	border: none;
+	border-radius: 3px;
+	object-fit: cover;
+}
+
+.nhud-popup .icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 2rem;
+	height: 2rem;
+	background: var(--nimble-basic-button-background-color);
+	border-radius: 3px;
+}
+
+.nhud-popup .icon i {
+	font-size: 1rem;
+	color: var(--nimble-medium-text-color);
+}
+
+.nhud-popup .content {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 0.125rem;
+	min-width: 0;
+}
+
+.nhud-popup .header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.375rem;
+}
+
+.nhud-popup .name {
+	font-size: var(--nimble-sm-text);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--nimble-dark-text-color);
+}
+
+.nhud-popup .meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.nhud-popup .meta--wide {
+	gap: 0.75rem;
+}
+
+.nhud-popup .tag {
+	padding: 0 0.25rem;
+	font-size: var(--nimble-xs-text);
+	font-weight: 500;
+	color: var(--nimble-medium-text-color);
+	background: var(--nimble-basic-button-background-color);
+	border-radius: 2px;
+}
+
+.nhud-popup .small {
+	font-size: var(--nimble-xs-text);
+	font-weight: 500;
+	color: var(--nimble-medium-text-color);
+}
+
+.nhud-popup .mana {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: var(--nimble-xs-text);
+	font-weight: 500;
+	color: hsl(270, 50%, 45%);
+}
+
+.nhud-popup .mana i {
+	font-size: 0.625rem;
+}
+
+.nhud-popup .damage {
+	display: inline-flex;
+	align-items: center;
+	flex-shrink: 0;
+	gap: 0.375rem;
+	padding: 0.25rem 0.625rem;
+	font-size: var(--nimble-sm-text);
+	font-weight: 600;
+	color: var(--nimble-dark-text-color);
+	background: var(--nimble-basic-button-background-color);
+	border-radius: 3px;
+}
+
+.nhud-popup .damage i {
+	font-size: 0.875rem;
+	color: hsl(0, 60%, 50%);
+}
+
+.nhud-popup .damage--healing i {
+	color: hsl(139, 50%, 40%);
+}
+
+.nhud-popup .expand {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 1.5rem;
+	height: 1.5rem;
+	padding: 0;
+	cursor: pointer;
+	color: var(--nimble-medium-text-color);
+	background: transparent;
+	border: none;
+	border-radius: 3px;
+	transition: all 0.15s ease;
+}
+
+.nhud-popup .expand:hover {
+	color: var(--nimble-dark-text-color);
+	background: var(--nimble-basic-button-background-color);
+}
+
+.nhud-popup .expand i {
+	font-size: 0.875rem;
+}
+
+.nhud-popup .description {
+	padding: 0.5rem 0.75rem;
+	font-size: var(--nimble-sm-text);
+	line-height: 1.5;
+	color: var(--nimble-dark-text-color);
+	border-top: 1px solid var(--nimble-card-border-color);
+}
+
+.nhud-popup .description p {
+	margin: 0 0 0.5rem;
+}
+
+.nhud-popup .description p:last-child {
+	margin-bottom: 0;
+}
+
+.nhud-popup .effect-section:not(:last-child) {
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--nimble-card-border-color);
+}
+
+.nhud-popup .effect-section strong {
+	display: block;
+	margin-bottom: 0.25rem;
+	font-size: var(--nimble-xs-text);
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	color: var(--nimble-medium-text-color);
+}

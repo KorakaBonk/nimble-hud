@@ -1,0 +1,90 @@
+{
+	"NIMBLE_HUD": {
+		"settings": {
+			"collapsed": {
+				"name": "HUD collapsed",
+				"hint": "Remember whether the HUD is collapsed to its small tab."
+			},
+			"scale": {
+				"name": "HUD scale",
+				"hint": "Scales the whole HUD. 1 is the default size."
+			},
+			"hideMacroBar": {
+				"name": "Hide the macro bar while the HUD is open",
+				"hint": "Hides Foundry's macro hotbar so the HUD can use the bottom of the screen."
+			},
+			"alwaysHideMacroBar": {
+				"name": "Always hide the macro bar",
+				"hint": "Hides Foundry's macro hotbar at all times, even while the HUD is collapsed or hidden."
+			},
+			"showForGM": {
+				"name": "Show the HUD for the GM",
+				"hint": "The HUD appears for a GM only while a player character token is controlled."
+			},
+			"showCombatBar": {
+				"name": "Show the combat bar",
+				"hint": "The bar above the HUD during combat with the round, whose turn it is, your action pips, initiative and End Turn. Turn it off if you prefer the system's combat tracker; the pips and End Turn are then only available there."
+			}
+		},
+		"collapse": "Collapse HUD",
+		"expand": "Show HUD",
+		"openHud": "Show HUD",
+		"stats": "Stats",
+		"saves": "Saves",
+		"skills": "Skills",
+		"hp": "Hit Points",
+		"tempHp": "Temp HP",
+		"armor": "Armor",
+		"mana": "Mana",
+		"hitDice": "Hit Dice",
+		"wounds": "Wounds",
+		"bloodied": "Bloodied",
+		"conditions": "Conditions",
+		"openSheet": "Open character sheet",
+		"wrongSystem": "Nimble HUD requires the Nimble game system.",
+		"round": "Round {round}",
+		"yourTurn": "Your turn",
+		"turnOf": "{name}'s turn",
+		"waitingForTurn": "Waiting for turn",
+		"combatNotStarted": "Combat has not started",
+		"rollInitiative": "Roll Initiative",
+		"endTurn": "End Turn",
+		"addAction": "Add 1 action",
+		"spendAction": "Spend action {number}",
+		"restoreAction": "Restore action {number}",
+		"spendActionTip": "Spend action",
+		"restoreActionTip": "Restore action",
+		"pendingGain": "Gains {count} additional action at the start of the next turn",
+		"pendingGainPlural": "Gains {count} additional actions at the start of the next turn",
+		"pendingLoss": "Starts the next turn with {count} fewer action",
+		"pendingLossPlural": "Starts the next turn with {count} fewer actions",
+		"confirmEndTurnTitle": "End Turn Early?",
+		"confirmEndTurnBody": "You haven't used all your actions yet. Are you sure you want to end your turn?",
+		"noPermissionInitiative": "You do not have permission to roll initiative for this character.",
+		"noPermissionEndTurn": "Could not end the turn. A GM must be connected for players to end turns.",
+		"rollHitDice": "Roll Hit Dice",
+		"addHp": "Add 1 hit point",
+		"removeHp": "Remove 1 hit point",
+		"quickBar": "Quick Bar",
+		"quickBarEmpty": "Drag an item or macro here",
+		"quickBarRemove": "Right-click to remove",
+		"quickBarForeignItem": "Only items owned by this character can be placed on the quick bar.",
+		"quickBarMacroImportFailed": "The macro could not be imported from its compendium.",
+		"quickBarAddColumn": "Add a column",
+		"quickBarRemoveColumn": "Remove a column",
+		"monstersTurn": "The monsters' turn",
+		"openSettings": "Open HUD settings",
+		"solo": "Solo",
+		"minion": "Minion",
+		"flunky": "Flunky",
+		"armorTooltip": {
+			"medium": "Medium Armor: Takes damage only from the rolled dice, ignoring all positive damage modifiers.",
+			"heavy": "Heavy Armor: Takes half damage (rounded up) from the dice, ignoring all positive damage modifiers."
+		},
+		"armorNone": "Armor: none",
+		"addMana": "Add 1 mana",
+		"removeMana": "Remove 1 mana",
+		"addPool": "Add 1 to {pool}",
+		"removePool": "Remove 1 from {pool}"
+	}
+}
