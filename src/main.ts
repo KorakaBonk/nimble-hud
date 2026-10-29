@@ -20,11 +20,11 @@ Hooks.once('ready', () => {
 
 	loadSettings();
 
-	// The HUD lives inside Foundry's interface layer so it stacks like the rest of the UI
-	// (above the canvas, below windows and dialogs).
+	// The HUD sits directly on <body>, outside Foundry's interface layer, so it can stack above
+	// every app window (sheets, journals, dialogs); see styles/global.css.
 	const host = document.createElement('div');
 	host.id = `${MODULE_ID}-root`;
-	(document.getElementById('interface') ?? document.body).appendChild(host);
+	document.body.appendChild(host);
 	mount(Hud, { target: host });
 	installTooltips(host);
 

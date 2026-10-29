@@ -25,7 +25,7 @@
 		triggerRest,
 	} from '../adapter/systemAdapter.ts';
 	import type { HeroicPopupId } from '../adapter/types.ts';
-	import { BODY_OPEN_CLASS, DOCK_GAP_PX } from '../constants.ts';
+	import { BODY_OPEN_CLASS, DOCK_GAP_PX, HUD_DIALOG_CLASS } from '../constants.ts';
 	import { t, ts } from '../localize.ts';
 	import { openModuleSettings, setCollapsed } from '../settings.ts';
 	import { hudState } from '../state/hudState.svelte.ts';
@@ -44,7 +44,7 @@
 	import VitalsBlock from './VitalsBlock.svelte';
 
 	const actor = $derived(hudState.actor);
-	// Monsters (GM only) get a reduced HUD: portrait, name, hit points, armor and their features.
+	// Monsters (for the GM, or a player's own minions) get a reduced HUD: portrait, name, hit points, armor and their features.
 	const monster = $derived(isMonster(actor));
 	const visible = $derived(
 		actor !== null && (monster || !game.user.isGM || hudState.showForGM),
@@ -70,6 +70,7 @@
 		if (combat.actions.current > 0) {
 			const confirmed = await foundry.applications.api.DialogV2.confirm({
 				window: { title: t('confirmEndTurnTitle') },
+				classes: [HUD_DIALOG_CLASS],
 				content: `<p>${t('confirmEndTurnBody')}</p>`,
 				rejectClose: false,
 			});

@@ -5,6 +5,7 @@
  * data path breaks one file instead of every component. Paths verified against Nimble
  * 0.10.0 (Foundry v14). See AGENTS.md for the rules this file follows.
  */
+import { HUD_DIALOG_CLASS } from '../constants.ts';
 import { t, ts } from '../localize.ts';
 import {
 	buildActionPool,
@@ -72,8 +73,10 @@ export function getBoundActor(): NimbleActor | null {
 	const tokenActor = controlled.length === 1 ? controlled[0]?.actor : null;
 	const actor = tokenActor ?? game.user?.character ?? null;
 	if (actor?.type === 'character') return actor;
-	// A GM who controls a single monster token gets the reduced monster HUD.
-	return game.user?.isGM && MONSTER_TYPES.has(actor?.type) ? actor : null;
+	// A single controlled monster token gets the reduced monster HUD: any monster for the GM,
+	// and for a player one they own, such as a minion their character summoned.
+	if (!MONSTER_TYPES.has(actor?.type)) return null;
+	return game.user?.isGM || actor.isOwner ? actor : null;
 }
 
 const MONSTER_TYPES = new Set(['npc', 'minion', 'soloMonster']);
@@ -1062,6 +1065,7 @@ export async function useOpportunityWeapon(actor: NimbleActor, itemId: string): 
 				.join(' ');
 			const confirmed = await foundry.applications.api.DialogV2.confirm({
 				window: { title: ts(`${prefix}.title`) },
+				classes: [HUD_DIALOG_CLASS],
 				content: `<p>${message}</p><p>${ts(`${prefix}.confirmQuestion`, { reaction: name })}</p>`,
 				yes: { label: ts(`${prefix}.confirm`) },
 				no: { label: ts(`${prefix}.cancel`) },
@@ -1560,6 +1564,8 @@ const CORE_HOOKS = [
 	'updateActiveEffect',
 	'deleteActiveEffect',
 	'controlToken',
+	// Unlinked tokens (such as summoned minions) keep their actor changes on the token.
+	'updateToken',
 	'updateUser',
 	'canvasReady',
 	'deleteToken',

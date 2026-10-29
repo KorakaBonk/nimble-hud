@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+- Players see the monster HUD for minion tokens they own (for example ones their character summoned) when they select the token.
+- The HUD now always renders above character, item and journal sheets and other windows. Confirm dialogs it opens stay above it.
+
 ## 1.0.0
 
 First public release.
