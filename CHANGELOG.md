@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Reverted the 1.1.0 layering change: the HUD stacks below app windows again, as in 1.0.0.
+
 ## 1.1.0
 
 - Players see the monster HUD for minion tokens they own (for example ones their character summoned) when they select the token.

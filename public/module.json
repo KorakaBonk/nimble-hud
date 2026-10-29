@@ -2,7 +2,7 @@
 	"id": "nimble-hud",
 	"title": "Nimble HUD",
 	"description": "A hideable bottom-of-screen character HUD for the Nimble system: portrait, vitals, stats and actions in one overlay.",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"authors": [{ "name": "KorakaBonk", "url": "https://github.com/KorakaBonk" }],
 	"url": "https://github.com/KorakaBonk/nimble-hud",
 	"manifest": "https://github.com/KorakaBonk/nimble-hud/releases/latest/download/module.json",

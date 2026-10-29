@@ -5,7 +5,6 @@
  * data path breaks one file instead of every component. Paths verified against Nimble
  * 0.10.0 (Foundry v14). See AGENTS.md for the rules this file follows.
  */
-import { HUD_DIALOG_CLASS } from '../constants.ts';
 import { t, ts } from '../localize.ts';
 import {
 	buildActionPool,
@@ -1065,7 +1064,6 @@ export async function useOpportunityWeapon(actor: NimbleActor, itemId: string): 
 				.join(' ');
 			const confirmed = await foundry.applications.api.DialogV2.confirm({
 				window: { title: ts(`${prefix}.title`) },
-				classes: [HUD_DIALOG_CLASS],
 				content: `<p>${message}</p><p>${ts(`${prefix}.confirmQuestion`, { reaction: name })}</p>`,
 				yes: { label: ts(`${prefix}.confirm`) },
 				no: { label: ts(`${prefix}.cancel`) },
