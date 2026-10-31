@@ -628,7 +628,7 @@ function weaponProperties(item: any): string[] {
 		.filter(Boolean);
 }
 
-/** Weapons and action-cost features, as the Attack panel lists them. */
+/** Weapons for the Attack panel. Unlike the sheet, action-cost features are left out. */
 export function readAttackList(actor: NimbleActor, search: string): AttackListView {
 	const items: any[] = bySort([...(actor.items ?? [])]);
 	const matching = (item: any) =>
@@ -636,10 +636,6 @@ export function readAttackList(actor: NimbleActor, search: string): AttackListVi
 
 	const weapons = items.filter(
 		(item) => item.type === 'object' && item.system?.objectType === 'weapon' && matching(item),
-	);
-	const features = items.filter(
-		(item) =>
-			item.type === 'feature' && item.system?.activation?.cost?.type === 'action' && matching(item),
 	);
 
 	const entry = (item: any, properties: string[]): WeaponEntryView => ({
@@ -656,10 +652,7 @@ export function readAttackList(actor: NimbleActor, search: string): AttackListVi
 
 	return {
 		unarmed: showUnarmed ? { damage: evaluateFormula(actor, unarmedFormula) } : null,
-		entries: [
-			...weapons.map((item) => entry(item, weaponProperties(item))),
-			...features.map((item) => entry(item, [ts(`${HEROIC_PREFIX}.feature`)])),
-		],
+		entries: weapons.map((item) => entry(item, weaponProperties(item))),
 	};
 }
 

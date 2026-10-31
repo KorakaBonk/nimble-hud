@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3
+
+- Attack panel: lists only Unarmed Strike and weapons. Action-cost features are no longer shown there.
+
 ## 1.1.2
 
 - Cast a Spell panel: spells are grouped under the character sheet's tier headings (Cantrips and Utility Spells, Tier 1 Spells, ...). Each tier can be collapsed.
