@@ -166,6 +166,27 @@ describe('simplifyFormula', () => {
 		expect(simplifyFormula('1d6 - 1', '1d6 - @x', evaluate)).toBe('1d6 - 1');
 	});
 
+	it('resolves computed dice counts', () => {
+		const withMath = (expression: string) =>
+			Function('Math', `with (Math) { return (${expression}); }`)(Math);
+		const original = '1d12+@key + (floor(@level / 5))d12';
+		expect(simplifyFormula('1d12+2 + (floor(2 / 5))d12', original, withMath)).toBe('1d12 + 2');
+		expect(simplifyFormula('1d12+2 + (floor(5 / 5))d12', original, withMath)).toBe(
+			'1d12 + 2 + 1d12',
+		);
+		expect(simplifyFormula('1d12+3 + (floor(10 / 5))d12', original, withMath)).toBe(
+			'1d12 + 3 + 2d12',
+		);
+		expect(simplifyFormula('(1 + 1)d6 + 0', '(1 + @x)d6', withMath)).toBe('2d6');
+	});
+
+	it('keeps signs and parenthesized math intact', () => {
+		expect(simplifyFormula('1d8 + (3 - 1) * 2', '', evaluate)).toBe('1d8 + 4');
+		expect(simplifyFormula('1d8 + -2', '', evaluate)).toBe('1d8 - 2');
+		expect(simplifyFormula('0 - 1d4', '', evaluate)).toBe('-1d4');
+		expect(simplifyFormula('2 * -1 + 1d6', '', evaluate)).toBe('-2 + 1d6');
+	});
+
 	it('falls back to the original when nothing is left', () => {
 		expect(simplifyFormula('+ 0', '@x', evaluate)).toBe('@x');
 	});

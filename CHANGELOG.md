@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2
+
+- Cast a Spell panel: spells are grouped under the character sheet's tier headings (Cantrips and Utility Spells, Tier 1 Spells, ...). Each tier can be collapsed.
+- Roll formulas resolve computed dice counts, so Shadow Blast shows `1d12 + 2 + 1d12` at level 5 instead of `(floor(5 / 5))d12`.
+
 ## 1.1.1
 
 - Reverted the 1.1.0 layering change: the HUD stacks below app windows again, as in 1.0.0.

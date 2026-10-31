@@ -199,6 +199,14 @@ export interface SpellEntryView {
 	higherLevelEffect: string | null;
 }
 
+/** Spells under one heading of the spell panel, as the character sheet's Spells tab groups them. */
+export interface SpellTierGroupView {
+	/** 0 holds cantrips and utility spells. */
+	tier: number;
+	label: string;
+	spells: SpellEntryView[];
+}
+
 export interface MovementSpeedView {
 	type: string;
 	value: number;

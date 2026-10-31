@@ -231,42 +231,85 @@ export function primaryEffectFormula(
 }
 
 /**
+ * Splits a formula into terms and the `+`/`-` operators between them, ignoring operators
+ * inside parentheses and signs that follow `*` or `/`.
+ */
+function splitTopLevel(formula: string): string[] {
+	const tokens: string[] = [];
+	let depth = 0;
+	let term = '';
+	for (const char of formula) {
+		if (char === '(') depth += 1;
+		if (char === ')') depth = Math.max(0, depth - 1);
+		if (depth === 0 && (char === '+' || char === '-') && !/[*/]\s*$/.test(term)) {
+			if (term.trim()) tokens.push(term.trim());
+			tokens.push(char);
+			term = '';
+			continue;
+		}
+		term += char;
+	}
+	if (term.trim()) tokens.push(term.trim());
+	return tokens;
+}
+
+/**
+ * One term of a substituted formula, simplified: plain dice are kept, a computed dice count
+ * such as `(floor(5 / 5))d12` becomes `1d12`, and static math is evaluated. Returns null for
+ * a term that comes out as zero (no dice, or a value of 0).
+ */
+function simplifyTerm(term: string, evaluate: (expression: string) => unknown): string | null {
+	if (/^\d*d\d+/i.test(term)) return term;
+
+	const toInteger = (expression: string): number | null => {
+		try {
+			const value = evaluate(expression);
+			return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : null;
+		} catch {
+			return null;
+		}
+	};
+
+	const [, countExpression, dice] = /^(.*\))\s*(d\d+.*)$/is.exec(term) ?? [];
+	if (countExpression && dice) {
+		const count = toInteger(countExpression);
+		if (count === null) return term;
+		return count <= 0 ? null : `${count}${dice}`;
+	}
+
+	const value = toInteger(term);
+	if (value === null) return term;
+	return value === 0 ? null : String(value);
+}
+
+/**
  * Simplifies a formula whose `@data` references are already substituted: static arithmetic
- * is evaluated with `evaluate`, dice terms are kept, and zero terms are dropped.
- * Mirrors the system's own `evaluateFormula`.
+ * is evaluated with `evaluate`, dice terms are kept, computed dice counts are resolved and
+ * zero terms are dropped. Falls back to `original` when nothing is left.
  */
 export function simplifyFormula(
 	substituted: string,
 	original: string,
 	evaluate: (expression: string) => unknown,
 ): string {
-	const simplified: string[] = [];
-	for (const part of substituted.split(/([+-])/)) {
-		const trimmed = part.trim();
-		if (!trimmed) continue;
-		if (trimmed === '+' || trimmed === '-' || /^\d*d\d+/i.test(trimmed)) {
-			simplified.push(trimmed);
+	let result = '';
+	let sign: '+' | '-' = '+';
+	for (const token of splitTopLevel(substituted)) {
+		if (token === '+' || token === '-') {
+			sign = sign === token ? '+' : '-';
 			continue;
 		}
-		try {
-			const value = evaluate(trimmed);
-			simplified.push(
-				typeof value === 'number' && !Number.isNaN(value) ? String(Math.floor(value)) : trimmed,
-			);
-		} catch {
-			simplified.push(trimmed);
+		let term = simplifyTerm(token, evaluate);
+		let termSign = sign;
+		sign = '+';
+		if (term === null) continue;
+		if (term.startsWith('-')) {
+			term = term.slice(1);
+			termSign = termSign === '-' ? '+' : '-';
 		}
+		if (!result) result = termSign === '-' ? `-${term}` : term;
+		else result += ` ${termSign} ${term}`;
 	}
-
-	const result = simplified
-		.join(' ')
-		.replace(/\s+/g, ' ')
-		.trim()
-		.replace(/[+-]\s*0(?!\d)/g, '')
-		.trim()
-		.replace(/^\s*[+-]\s*/, '')
-		.replace(/[+-]\s*[+-]/g, '+')
-		.trim();
 	return result || original;
 }
 

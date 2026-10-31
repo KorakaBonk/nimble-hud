@@ -45,6 +45,7 @@ import type {
 	MoveView,
 	MovementSpeedView,
 	SpellEntryView,
+	SpellTierGroupView,
 	WeaponEntryView,
 	ManaView,
 	PortraitView,
@@ -773,6 +774,37 @@ function spellRange(item: any): string | null {
 }
 
 /** Spells as the Cast a Spell panel lists them. */
+/** The sheet's heading tier: utility spells sit with the cantrips, as on the Spells tab. */
+function spellHeadingTier(item: any): number {
+	const properties = (item.system?.properties?.selected ?? []) as string[];
+	return properties.includes('utilitySpell') ? 0 : Number(item.system?.tier) || 0;
+}
+
+/** Castable spells grouped by tier, lowest first, with the sheet's tier headings. */
+export function readSpellGroups(actor: NimbleActor, search: string): SpellTierGroupView[] {
+	const spells = readSpellList(actor, search);
+	const tierById = new Map<string, number>(
+		castableSpells(actor).map((item) => [item.id, spellHeadingTier(item)]),
+	);
+	const headings: Record<number, string> = nimbleConfig().spellTierHeadings ?? {};
+
+	const groups = new Map<number, SpellEntryView[]>();
+	for (const spell of spells) {
+		const tier = tierById.get(spell.id) ?? spell.tier;
+		const list = groups.get(tier) ?? [];
+		list.push(spell);
+		groups.set(tier, list);
+	}
+
+	return [...groups.entries()]
+		.sort(([a], [b]) => a - b)
+		.map(([tier, tierSpells]) => ({
+			tier,
+			label: headings[tier] ? game.i18n.localize(headings[tier]) : String(tier),
+			spells: tierSpells,
+		}));
+}
+
 export function readSpellList(actor: NimbleActor, search: string): SpellEntryView[] {
 	const spells = bySort(castableSpells(actor)).filter((item) =>
 		matchesSearch(search, item.name ?? '', descriptionText(item.system?.description)),
